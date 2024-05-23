@@ -70,6 +70,26 @@ with open('edinburgh_2022_ward5.csv', encoding="utf8") as csv_file:
 # for i in range(k):
 #     ballots[(k+i+1, )] = 10+i*0.1
 
+ballots = {}
+k = 3
+cand_num = 2*k
+seat_num = k
+c = 10
+ballots[(1, )] = 3*c
+ballots[(1, 1+k)] = 1*c
+ballots[(k+1, 1)] = 2*c
+ballots[(1, 2+k)] = 1*c
+ballots[(2+k, 1)] = 2*c
+for i in range(2, k):
+    ballots[(i, i+k)] = 2*c
+    ballots[(i+k, i)] = 2*c
+    ballots[(i, i+k+1)] = 2*c
+    ballots[(i+k+1, i)] = 2*c
+ballots[(k, 2*k)] = 2*c
+ballots[(2*k, k)] = 2*c
+ballots[(k, 1+k)] = 2*c
+ballots[(1+k, k)] = 2*c
+
 ##### alt worst case analysis winner ballots
 # ballots = {}
 # k = 3

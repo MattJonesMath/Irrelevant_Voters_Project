@@ -44,7 +44,8 @@ def get_cand_weights(weights, elected, max_error):
 bottom=False
 # with open('east_ayrshire_2012_ward5.csv', encoding="utf8") as csv_file:
 # with open('falkirk_2017_ward3.csv', encoding="utf8") as csv_file:
-with open('edinburgh_2022_ward5.csv', encoding="utf8") as csv_file:
+# with open('edinburgh_2022_ward5.csv', encoding="utf8") as csv_file:
+with open('aberdeenshire_2012_ward1.csv', encoding="utf8") as csv_file:
     csv_reader = csv.reader(csv_file)
     line_count = 0
     for row in csv_reader:
@@ -180,6 +181,7 @@ while hopeful:
         while hopeful:
             indx = hopeful_votes.index(min(hopeful_votes))
             excluded.append(hopeful.pop(indx))
+            hopeful_votes.pop(indx)
                 
     
 print('####################')

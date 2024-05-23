@@ -1,7 +1,7 @@
 from elections_class import mw_elections as mwe
 import time
 
-election = mwe('edinburgh_2022_ward5.csv')
+election = mwe('glasgow_2012_ward5.csv')
 
 start_time = time.time()
 print('###################')
@@ -31,6 +31,12 @@ start_time = time.time()
 print('###################')
 print('Greedy Chamberlin-Courant Results')
 print(election.greedy_cham_cour('OM'))
+print(f'Time: {time.time()-start_time}')
+
+start_time = time.time()
+print('###################')
+print('Expanding Approvals Results')
+print(election.expanding_approvals())
 print(f'Time: {time.time()-start_time}')
 
 start_time = time.time()

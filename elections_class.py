@@ -274,6 +274,7 @@ class mw_elections:
                 while hopeful:
                     indx = hopeful_votes.index(min(hopeful_votes))
                     excluded.append(hopeful.pop(indx))
+                    hopeful_votes.pop(indx)
         
         return elected, excluded
 
@@ -445,7 +446,7 @@ class mw_elections:
                     points += self.cand_num - 1 - len(ballot)
             outcome_points.append(points)
             
-        return outcomes[outcome_points.index(max(outcome_points))] 
+        return list(outcomes[outcome_points.index(max(outcome_points))]) 
     
     
     ################################
@@ -483,7 +484,51 @@ class mw_elections:
         return elected
     
     
+    ###############################
+    ## Expanding Approvals
+    ###############################
+    def expanding_approvals(self):
+        ballot_weights = self.ballots.copy()
+        remaining = list(range(1, self.cand_num+1))
+        elected = []
+        j = 0
+
+        total_votes = 0
+        for ballot in ballot_weights:
+            total_votes += ballot_weights[ballot]
+        # quota = total_votes/(self.seat_num+1) + 1/(cand_num+1)*(np.floor(total_votes/(seat_num+1)) + 1 - total_votes/(seat_num+1))
+        quota = total_votes/(self.seat_num+1)
+
+        while len(elected)<self.seat_num:
+            cand_votes = [0 for _ in range(self.cand_num)]
+            for ballot in ballot_weights:
+                ballot_num = ballot_weights[ballot]
+                for cand in ballot[:j+1]:
+                    cand_votes[cand-1] += ballot_num
+            
+            possible_winners = [cand for cand in remaining if cand_votes[cand-1] > quota]
+            if possible_winners or j >= self.cand_num-2:
+                remaining_votes = [cand_votes[cand-1] for cand in remaining]
+                winner = remaining[remaining_votes.index(max(remaining_votes))]
+                
+                remaining.remove(winner)
+                elected.append(winner)
+                
+                supporters = []
+                support_vote = 0
+                for ballot in ballot_weights:
+                    if winner in ballot[:j+1]:
+                        supporters.append(ballot)
+                        support_vote += ballot_weights[ballot]
+                
+                payment_frac = (support_vote - quota)/support_vote
+                for ballot in supporters:
+                    ballot_weights[ballot] *= payment_frac
+            
+            else:
+                j+=1
     
+        return elected
     
     
     
