@@ -11,9 +11,14 @@ class mw_elections:
     
     
     def __init__(self, name):
-        self.name = name
-        self.ballots, self.cand_num, self.seat_num = self.get_ballots(self.name)
-    
+        if name != '':
+            self.name = name
+            self.ballots, self.cand_num, self.seat_num = self.get_ballots(self.name)
+        else:
+            self.ballots = {}
+            self.cand_num = 0
+            self.seat_num = 0
+        self.model = 'OM'
     
     #####################################
     ## read csv files from mggg/scot-elex
@@ -60,6 +65,7 @@ class mw_elections:
     #######################
     def scot_stv(self):
         stv_ballots = self.ballots.copy()
+        ## remaining is candidates that have not had excess redistributed
         remaining = list(range(1,self.cand_num+1))
         elected = []
         removed = []
@@ -79,6 +85,12 @@ class mw_elections:
                     if ballot[0]==cand:
                         votes+=stv_ballots[ballot]
                 vote_counts.append(votes)
+                
+                
+            # print(remaining)
+            # print(vote_counts)
+            # print(quota)
+            
             
             ## only go through computations if more candidates need to be elected
             if len(elected)<self.seat_num:
@@ -86,18 +98,38 @@ class mw_elections:
                 if len(elected)+len(remaining)>self.seat_num:
                     ## a candidate has quota, so elect the top candidate remaining
                     if max(vote_counts)>=quota:
+                        
+                        ## all that make surplus elected
+                        for i in range(len(remaining)):
+                            if vote_counts[i]>quota and remaining[i] not in elected:
+                                elected.append(remaining[i])
+                        
+                        ## redistribute votes for top winner
                         indx = vote_counts.index(max(vote_counts))
                         removed_frac = quota/vote_counts[indx]
-                        elected.append(remaining.pop(indx))
-                        new_winner = elected[-1]
+                        new_winner = remaining[indx]
+                        remaining.remove(new_winner)
                         
                         ## make new ballots that don't rank new_winner
                         new_ballots = {}
                         for ballot in stv_ballots:
+                            ## take away ballots that support new_winner
                             if ballot[0] == new_winner:
                                 stv_ballots[ballot] = stv_ballots[ballot]*(1-removed_frac)
-                            if ballot != (new_winner,):
-                                new_ballot = tuple(x for x in ballot if x!=new_winner)
+                                
+                            ## redistribute all excess votes to lower candidates that have not been elected
+                            if ballot[0] == new_winner and set(ballot)-set(elected):
+                                new_ballot = tuple(x for x in ballot if x not in elected)
+                            ## votes for candidates that have been elected but are not new_winner are untouched except removing new_winner
+                            elif ballot[0] in remaining and ballot[0] in elected:
+                                new_ballot = tuple(x for x in ballot if x != new_winner)
+                            ## all other votes remove all elected candidates
+                            elif set(ballot)-set(elected):
+                                new_ballot = tuple(x for x in ballot if x not in elected)
+                            else:
+                                new_ballot = []
+        
+                            if new_ballot:                                  
                                 if new_ballot in new_ballots:
                                     new_ballots[new_ballot] += stv_ballots[ballot]
                                 else:
@@ -145,6 +177,7 @@ class mw_elections:
         remaining = list(range(1,self.cand_num+1))
         elected = []
         removed = []
+        redistributed = 0
         ballot_total = 0
         for ballot in stv_ballots:
             ballot_total += stv_ballots[ballot]
@@ -159,7 +192,14 @@ class mw_elections:
                     if ballot[0]==cand:
                         votes+=stv_ballots[ballot]
                 vote_counts.append(votes)
-            quota = int(sum(vote_counts)/(self.seat_num+1-len(elected))) + 1
+            ## recompute quota
+            quota = int(sum(vote_counts)/(self.seat_num+1-redistributed)) + 1
+            
+            
+            # print(remaining)
+            # print(vote_counts)
+            # print(quota)
+            
             
             ## only go through computations if more candidates need to win seats
             if len(elected)<self.seat_num:
@@ -167,21 +207,44 @@ class mw_elections:
                 if len(elected)+len(remaining)>self.seat_num:
                     ## candidate makes quota, elect best candidate
                     if max(vote_counts)>=quota:
+                        
+                        ## all that make surplus elected, only top has excess redistributed
+                        for i in range(len(remaining)):
+                            if vote_counts[i]>=quota and remaining[i] not in elected:
+                                elected.append(remaining[i])
+                        
+                        ## top candidate has votes redistributed
                         indx = vote_counts.index(max(vote_counts))
                         removed_frac = quota/vote_counts[indx]
-                        elected.append(remaining.pop(indx))
-                        new_winner = elected[-1]
+                        new_winner = remaining[indx]
+                        remaining.remove(new_winner)
+                        redistributed += 1
+                        
                         ## make new ballots without new_winner
                         new_ballots = {}
                         for ballot in stv_ballots:
+                            ## take away ballots that support new_winner
                             if ballot[0] == new_winner:
-                                stv_ballots[ballot]=stv_ballots[ballot]*(1-removed_frac)
-                            if ballot != (new_winner,):
-                                new_ballot = tuple(x for x in ballot if x!=new_winner)
+                                stv_ballots[ballot] = stv_ballots[ballot]*(1-removed_frac)
+                                
+                            ## redistribute all excess votes to lower candidates that have not been elected
+                            if ballot[0] == new_winner and set(ballot)-set(elected):
+                                new_ballot = tuple(x for x in ballot if x not in elected)
+                            ## votes for candidates that have been elected but are not new_winner are untouched except removing new_winner
+                            elif ballot[0] in remaining and ballot[0] in elected:
+                                new_ballot = tuple(x for x in ballot if x != new_winner)
+                            ## all other votes remove all elected candidates
+                            elif set(ballot)-set(elected):
+                                new_ballot = tuple(x for x in ballot if x not in elected)
+                            else:
+                                new_ballot = []
+                                    
+                            if new_ballot:                                  
                                 if new_ballot in new_ballots:
                                     new_ballots[new_ballot] += stv_ballots[ballot]
                                 else:
                                     new_ballots[new_ballot] = stv_ballots[ballot]
+                        
                         stv_ballots = new_ballots
                         
                     ## no candidate makes quota, remove worst candidate 
@@ -262,8 +325,8 @@ class mw_elections:
                 else:
                     ## elect all hopeful candidates in order of current votes
                     cand_votes, weights, quota = self.get_cand_weights(weights, elected, max_error = 0.001)
-                    hopeful_votes = [cand_votes[cand-1] for cand in hopeful]
                     while hopeful:
+                        hopeful_votes = [cand_votes[cand-1] for cand in hopeful]
                         indx = hopeful_votes.index(max(hopeful_votes))
                         elected.append(hopeful.pop(indx))
             
@@ -418,13 +481,16 @@ class mw_elections:
                 worst_losses.append(min(scores))
             win_set = worst_losses.index(max(worst_losses))
             
-        return outcomes[win_set], condorcet
+        winner_set = outcomes[win_set]
+        loser_set = [cand for cand in range(1,self.cand_num+1) if cand not in winner_set]
+        
+        return winner_set, loser_set, condorcet
     
     
     ##########################
     ## Chamberlin-Courant Rule
     ##########################
-    def cham_cour(self, model):
+    def cham_cour(self):
         ## enumerate all possible winner sets
         outcomes = list(combinations(list(range(1, self.cand_num+1)), self.seat_num))
         outcome_points = []
@@ -442,17 +508,20 @@ class mw_elections:
                         break
                 ## In the optimistic model, add points if the truncated ballot
                 ## does not have any candidates in outcome
-                if model == 'OM' and not cands_ranked:
+                if self.model == 'OM' and not cands_ranked:
                     points += self.cand_num - 1 - len(ballot)
             outcome_points.append(points)
             
-        return list(outcomes[outcome_points.index(max(outcome_points))]) 
+        winner_set = list(outcomes[outcome_points.index(max(outcome_points))])
+        loser_set = [cand for cand in range(1,self.cand_num+1) if cand not in winner_set]
+            
+        return winner_set, loser_set
     
     
     ################################
     ## Greed Chamberlin-Courant Rule
     ################################
-    def greedy_cham_cour(self, model):
+    def greedy_cham_cour(self):
         hopeful = list(range(1, self.cand_num+1))
         elected = []
         
@@ -474,14 +543,14 @@ class mw_elections:
                             break
                     ## In the optimistic model, add points if the truncated ballot
                     ## does not have any candidates in outcome
-                    if model == 'OM' and not cands_ranked:
+                    if self.model == 'OM' and not cands_ranked:
                         points += self.cand_num - 1 - len(ballot)
                 outcome_points.append(points)
             
             indx = outcome_points.index(max(outcome_points))
             elected.append(hopeful.pop(indx))
             
-        return elected
+        return elected, hopeful
     
     
     ###############################
@@ -528,7 +597,7 @@ class mw_elections:
             else:
                 j+=1
     
-        return elected
+        return elected, remaining
     
     
     

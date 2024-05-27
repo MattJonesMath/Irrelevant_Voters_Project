@@ -5,11 +5,12 @@
 from elections_class import mw_elections as mwe
 import os
 import csv
+import sys
 
 
-###################################
-## Chose which elections to run
-###################################
+##################################
+## Chose which elections to run ##
+##################################
 run_scottish = True
 run_adapt_quota = True
 run_meek = True
@@ -39,25 +40,22 @@ for folder_name in os.listdir('../full_scot_data'):
  
 ## Run all the chosen methods on all the scottish elections
 election_results = []
-for name in file_names:
-    print(name)
+for election_num, name in enumerate(file_names):
+    
+    sys.stdout.write('\r')
+    sys.stdout.write(f'Election {election_num+1}/{len(file_names)}' + '    ' + name + '                                     ')
+    sys.stdout.flush()
+    
+    # print(name)
     election_dict = {}
     election_dict['Election'] = name
     election = mwe(file_names[name])
-    if run_scottish:
-        election_dict[headers[0]] = election.scot_stv()[0]
-    if run_adapt_quota:
-        election_dict[headers[1]] = election.aq_stv()[0]
-    if run_meek:
-        election_dict[headers[2]] = election.meek_stv()[0]
-    if run_cham_cour:
-        election_dict[headers[3]] = election.cham_cour('OM')
-    if run_greedy_cham_cour:
-        election_dict[headers[4]] = election.greedy_cham_cour('OM')
-    if run_expand_app:
-        election_dict[headers[5]] = election.expanding_approvals()
-    if run_cpo_stv:
-        election_dict[headers[6]] = election.cpo_stv()[0]
+    
+    method_functions = [election.scot_stv, election.aq_stv, election.meek_stv, election.cham_cour, election.greedy_cham_cour, election.expanding_approvals, election.cpo_stv]
+    
+    for i in range(7):
+        if which_methods[i]:
+            election_dict[headers[i]] = method_functions[i]()[0]
         
     election_results.append(election_dict)
 
