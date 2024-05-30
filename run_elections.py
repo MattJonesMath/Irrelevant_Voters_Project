@@ -1,7 +1,7 @@
 from elections_class import mw_elections as mwe
 import time
 
-election = mwe('argyll_bute_2022_ward4.csv                                                   ')
+election = mwe('../full_scot_data/7_cands/fife_2012_ward3.csv')
 
 start_time = time.time()
 print('###################')

@@ -19,6 +19,7 @@ class mw_elections:
             self.cand_num = 0
             self.seat_num = 0
         self.model = 'OM'
+        
     
     #####################################
     ## read csv files from mggg/scot-elex
@@ -86,7 +87,8 @@ class mw_elections:
                         votes+=stv_ballots[ballot]
                 vote_counts.append(votes)
                 
-                
+            
+            # print('## next round ##')
             # print(remaining)
             # print(vote_counts)
             # print(quota)
@@ -163,7 +165,10 @@ class mw_elections:
             ## in the order of first place votes
             else:
                 indx = vote_counts.index(min(vote_counts))
-                removed.append(remaining.pop(indx))
+                if remaining[indx] in elected:
+                    remaining.pop(indx)
+                else:
+                    removed.append(remaining.pop(indx))
     
         ## return the candidates that were elected and the candidates that were removed
         return elected, removed
@@ -196,7 +201,9 @@ class mw_elections:
             quota = int(sum(vote_counts)/(self.seat_num+1-redistributed)) + 1
             
             
+            # print('## next round ##')
             # print(remaining)
+            # print(elected)
             # print(vote_counts)
             # print(quota)
             
@@ -219,6 +226,7 @@ class mw_elections:
                         new_winner = remaining[indx]
                         remaining.remove(new_winner)
                         redistributed += 1
+
                         
                         ## make new ballots without new_winner
                         new_ballots = {}
@@ -274,7 +282,10 @@ class mw_elections:
             else:
                 # print('Remaining candidates lose by default')
                 indx = vote_counts.index(min(vote_counts))
-                removed.append(remaining.pop(indx))
+                if remaining[indx] in elected:
+                    remaining.pop(indx)
+                else:
+                    removed.append(remaining.pop(indx))
 
         ## return the candidates that were elected and the candidates that were removed
         return elected, removed
