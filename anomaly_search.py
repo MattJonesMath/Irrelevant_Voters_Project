@@ -170,7 +170,7 @@ anomaly_results = [{'Election': name} for name in file_names]
 
 start_time = time.time()
 print('### Searching for Losing Voter Bloc Anomalies ###')
-quota_steps = 20
+quota_steps = 1
 loser_anomaly_count = [0 for i in range(method_num)]
 for election_num, name in enumerate(file_names):
 
@@ -194,7 +194,7 @@ print(f'Time taken: {time.time()-start_time}')
 
 start_time = time.time()
 print('### Searching for Winning Voter Bloc Anomalies ###')
-quota_steps = 6
+quota_steps = 1
 winner_anomaly_count = [0 for i in range(method_num)]
 for election_num, name in enumerate(file_names):
 
@@ -217,7 +217,7 @@ print(f'Winner Anomalies Found: {winner_anomaly_count}                          
 print(f'Time taken: {time.time()-start_time}')
 
 ## Write results to csv file
-with open('anomaly_data_6.01.csv', 'w', newline='') as csvfile:
+with open('anomaly_data_6.02.csv', 'w', newline='') as csvfile:
     writer = csv.DictWriter(csvfile, fieldnames=csv_headers)
     writer.writeheader()
     for election in anomaly_results:
