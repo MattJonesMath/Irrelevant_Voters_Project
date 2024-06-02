@@ -1,13 +1,13 @@
 from elections_class import mw_elections as mwe
 import time
 
-election = mwe('../full_scot_data/7_cands/fife_2012_ward3.csv')
+election = mwe('../full_scot_data/10_cands/dumgal_2017_ward9.csv')
 
-start_time = time.time()
-print('###################')
-print('Scottish STV Results')
-print(election.scot_stv())
-print(f'Time: {time.time()-start_time}')
+# start_time = time.time()
+# print('###################')
+# print('Scottish STV Results')
+# print(election.scot_stv())
+# print(f'Time: {time.time()-start_time}')
 
 start_time = time.time()
 print('###################')

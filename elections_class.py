@@ -90,6 +90,7 @@ class mw_elections:
             
             # print('## next round ##')
             # print(remaining)
+            # print(elected)
             # print(vote_counts)
             # print(quota)
             
@@ -103,7 +104,7 @@ class mw_elections:
                         
                         ## all that make surplus elected
                         for i in range(len(remaining)):
-                            if vote_counts[i]>quota and remaining[i] not in elected:
+                            if vote_counts[i]>=quota and remaining[i] not in elected:
                                 elected.append(remaining[i])
                         
                         ## redistribute votes for top winner
