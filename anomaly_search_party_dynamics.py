@@ -32,10 +32,27 @@ def loser_anomaly_search(file_name, method_indx):
     same_party_winners = []
     same_party_excluded_ballots = {}
     
+    win_lose_pairs = []
+    for winner in reversed(winners):
+        for loser in reversed(losers):
+            if full_lxn.parties[winner-1] != full_lxn.parties[loser-1]:
+                win_lose_pairs.append([winner,loser])
+    
     remove_fracs = [i/sigma_l for i in range(sigma_l,0,-1)]
     # remove_fracs = [1]
-    for loser in reversed(losers):
-        keep_set = set(winners + [loser])
+    for pair in win_lose_pairs:
+        winner = pair[0]
+        loser = pair[1]
+        
+        winner_party = full_lxn.parties[winner-1]
+        loser_party = full_lxn.parties[loser-1]
+        
+        keep_list = winners.copy()
+        for cand in losers:
+            if full_lxn.parties[cand-1] == loser_party or full_lxn.parties[cand-1] == winner_party:
+                keep_list.append(cand)
+                
+        keep_set = set(keep_list)
         for frac in reversed(remove_fracs):
             excluded_ballots = {}
             mod_ballots = {}
@@ -51,11 +68,15 @@ def loser_anomaly_search(file_name, method_indx):
             if loser in new_winners:
                 new_winner_parties = [full_lxn.parties[cand-1] for cand in new_winners]
                 new_winner_parties.sort()
-                if winner_parties != new_winner_parties:
-                    return new_winners, excluded_ballots, [winner_parties, new_winner_parties]
-                else:
-                    same_party_winners = new_winners.copy()
-                    same_party_excluded_ballots = copy.deepcopy(excluded_ballots)
+                if winner not in new_winners and loser in new_winners:
+                    if new_winner_parties.count(winner_party) == winner_parties.count(winner_party) - 1:
+                        if new_winner_parties.count(loser_party) == winner_parties.count(loser_party) + 1:
+                            return new_winners, excluded_ballots, [winner_parties, new_winner_parties]
+                    
+                #     return new_winners, excluded_ballots, [winner_parties, new_winner_parties]
+                # else:
+                #     same_party_winners = new_winners.copy()
+                #     same_party_excluded_ballots = copy.deepcopy(excluded_ballots)
     
     return same_party_winners, same_party_excluded_ballots, [winner_parties, winner_parties]
 
@@ -87,11 +108,15 @@ def winner_anomaly_search(file_name, method_indx):
     win_lose_pairs = []
     for winner in reversed(winners):
         for loser in reversed(losers):
-            win_lose_pairs.append([winner,loser])
+            if full_lxn.parties[winner-1] != full_lxn.parties[loser-1]:
+                win_lose_pairs.append([winner,loser])
 
     for pair in win_lose_pairs:
         winner = pair[0]
         loser = pair[1]
+        
+        winner_party = full_lxn.parties[winner-1]
+        loser_party = full_lxn.parties[loser-1]
         
         ## determine which candidates help winner the most
         winner_keeper_balance = {cand:0 for cand in winners if cand!=winner}
@@ -116,6 +141,12 @@ def winner_anomaly_search(file_name, method_indx):
         
         winners_by_support = sorted(list(winner_keeper_balance.keys()), key = lambda cand: winner_keeper_balance[cand], reverse=True)
         
+        # only consider removing cands with different parties than winner and loser
+        for cand in winners_by_support:
+            if full_lxn.parties[cand-1] == winner_party or full_lxn.parties[cand-1] == loser_party:
+                winners_by_support.remove(cand)
+        
+        
         remove_fracs = [i/sigma_w for i in range(sigma_w,0,-1)]
         for frac in reversed(remove_fracs):
             for i in range(1,len(winners_by_support)+1):
@@ -131,14 +162,21 @@ def winner_anomaly_search(file_name, method_indx):
                         mod_ballots[ballot] = count - int(frac * count)
                 lxn.ballots = mod_ballots
                 new_winners = lxn_method()[0]
-                if winner not in new_winners:
+                if winner not in new_winners and loser in new_winners:
                     new_winner_parties = [full_lxn.parties[cand-1] for cand in new_winners]
                     new_winner_parties.sort()
-                    if winner_parties != new_winner_parties:
-                        return new_winners, excluded_ballots, [winner_parties, new_winner_parties]
-                    else:
-                        same_party_winners = new_winners.copy()
-                        same_party_excluded_ballots = copy.deepcopy(excluded_ballots)
+                    if new_winner_parties.count(winner_party) == winner_parties.count(winner_party) - 1:
+                        if new_winner_parties.count(loser_party) == winner_parties.count(loser_party) + 1:
+                            return new_winners, excluded_ballots, [winner_parties, new_winner_parties]
+                    
+                    # if winner_parties != new_winner_parties:
+                    #     return new_winners, excluded_ballots, [winner_parties, new_winner_parties]
+                    # else:
+                    #     print('### Weird thing! ###')
+                    #     print(file_name)
+                    #     print('####################')
+                    #     same_party_winners = new_winners.copy()
+                    #     same_party_excluded_ballots = copy.deepcopy(excluded_ballots)
             
     return same_party_winners, same_party_excluded_ballots, [winner_parties, winner_parties]
     
@@ -173,11 +211,15 @@ def alt_winner_anomaly_search(file_name, method_indx):
     win_lose_pairs = []
     for winner in reversed(winners):
         for loser in reversed(losers):
-            win_lose_pairs.append([winner,loser])
+            if full_lxn.parties[winner-1] != full_lxn.parties[loser-1]:
+                win_lose_pairs.append([winner,loser])
 
     for pair in win_lose_pairs:
         winner = pair[0]
         loser = pair[1]
+        
+        winner_party = full_lxn.parties[winner-1]
+        loser_party = full_lxn.parties[loser-1]
         
         ## determine which candidates help winner the most
         winner_keeper_balance = {cand:0 for cand in winners if cand!=winner}
@@ -202,6 +244,11 @@ def alt_winner_anomaly_search(file_name, method_indx):
         
         winners_by_support = sorted(list(winner_keeper_balance.keys()), key = lambda cand: winner_keeper_balance[cand], reverse=True)
         
+        # only consider removing cands with different parties than winner and loser
+        for cand in winners_by_support:
+            if full_lxn.parties[cand-1] == winner_party or full_lxn.parties[cand-1] == loser_party:
+                winners_by_support.remove(cand)
+                
         remove_fracs = [i/sigma_w for i in range(sigma_w,0,-1)]
         for frac in reversed(remove_fracs):
             for i in range(1,len(winners_by_support)+1):
@@ -220,11 +267,17 @@ def alt_winner_anomaly_search(file_name, method_indx):
                 if winner not in new_winners and set(winners_to_remove).issubset(new_winners):
                     new_winner_parties = [full_lxn.parties[cand-1] for cand in new_winners]
                     new_winner_parties.sort()
-                    if winner_parties != new_winner_parties:
-                        return new_winners, excluded_ballots, [winner_parties, new_winner_parties]
-                    else:
-                        same_party_winners = new_winners.copy()
-                        same_party_excluded_ballots = copy.deepcopy(excluded_ballots)
+                    
+                    if new_winner_parties.count(winner_party) == winner_parties.count(winner_party) - 1:
+                        if new_winner_parties.count(loser_party) == winner_parties.count(loser_party) + 1:
+                            return new_winners, excluded_ballots, [winner_parties, new_winner_parties]
+                    
+                    
+                    # if winner_parties != new_winner_parties:
+                    #     return new_winners, excluded_ballots, [winner_parties, new_winner_parties]
+                    # else:
+                    #     same_party_winners = new_winners.copy()
+                    #     same_party_excluded_ballots = copy.deepcopy(excluded_ballots)
             
     return same_party_winners, same_party_excluded_ballots, [winner_parties, winner_parties]
     
@@ -302,7 +355,7 @@ anomaly_results = [{'Election': name} for name in file_names]
 start_time = time.time()
 print('### Searching for Losing Voter Bloc Anomalies ###')
 sigma_l = 10
-loser_anomaly_count = [0 for i in range(method_num)]
+# loser_anomaly_count = [0 for i in range(method_num)]
 loser_party_change_count = [0 for i in range(method_num)]
 for election_num, name in enumerate(file_names):
 
@@ -316,7 +369,7 @@ for election_num, name in enumerate(file_names):
         if which_methods[method_indx]:
             new_win_set, removed_ballots, party_lists = loser_anomaly_search(file_names[name], method_indx)
             if new_win_set:
-                loser_anomaly_count[method_indx] += 1
+                # loser_anomaly_count[method_indx] += 1
                 election_dict[losing_voters_headers[method_indx]] = new_win_set
                 election_dict[removed_losing_ballot_headers[method_indx]] = removed_ballots
                 election_dict[losing_voters_full_party_headers[method_indx]] = party_lists[0]
@@ -326,7 +379,7 @@ for election_num, name in enumerate(file_names):
                 
     # anomaly_results.append(election_dict)
 sys.stdout.write('\r')
-print(f'Loser Anomalies Found: {loser_anomaly_count}                                ')
+# print(f'Loser Anomalies Found: {loser_anomaly_count}                                ')
 print(f'Loser Anomalies with Party Changes: {loser_party_change_count}                                ')
 print(f'Time taken: {time.time()-start_time}')
 
@@ -335,7 +388,7 @@ print(f'Time taken: {time.time()-start_time}')
 start_time = time.time()
 print('### Searching for Winning Voter Bloc Anomalies ###')
 sigma_w = 3
-winner_anomaly_count = [0 for i in range(method_num)]
+# winner_anomaly_count = [0 for i in range(method_num)]
 winner_party_change_count = [0 for i in range(method_num)]
 for election_num, name in enumerate(file_names):
 
@@ -349,7 +402,7 @@ for election_num, name in enumerate(file_names):
         if which_methods[method_indx]:
             new_win_set, removed_ballots, party_lists = winner_anomaly_search(file_names[name], method_indx)
             if new_win_set:
-                winner_anomaly_count[method_indx] += 1
+                # winner_anomaly_count[method_indx] += 1
                 election_dict[winning_voters_headers[method_indx]] = new_win_set
                 election_dict[removed_winning_ballot_headers[method_indx]] = removed_ballots
                 election_dict[winning_voters_full_party_headers[method_indx]] = party_lists[0]
@@ -359,7 +412,7 @@ for election_num, name in enumerate(file_names):
                     
     # anomaly_results.append(election_dict)
 sys.stdout.write('\r')
-print(f'Winner Anomalies Found: {winner_anomaly_count}                                ')
+# print(f'Winner Anomalies Found: {winner_anomaly_count}                                ')
 print(f'Winner Anomalies with Party Changes: {winner_party_change_count}                                ')
 print(f'Time taken: {time.time()-start_time}')
 
@@ -368,7 +421,7 @@ print(f'Time taken: {time.time()-start_time}')
 
 start_time = time.time()
 print('### Searching for Alt Winning Voter Bloc Anomalies ###')
-alt_winner_anomaly_count = [0 for i in range(method_num)]
+# alt_winner_anomaly_count = [0 for i in range(method_num)]
 alt_winner_party_change_count = [0 for i in range(method_num)]
 for election_num, name in enumerate(file_names):
 
@@ -382,7 +435,7 @@ for election_num, name in enumerate(file_names):
         if which_methods[method_indx]:
             new_win_set, removed_ballots, party_lists = alt_winner_anomaly_search(file_names[name], method_indx)
             if new_win_set:
-                alt_winner_anomaly_count[method_indx] += 1
+                # alt_winner_anomaly_count[method_indx] += 1
                 election_dict[alt_winning_voters_headers[method_indx]] = new_win_set
                 election_dict[alt_removed_winning_ballot_headers[method_indx]] = removed_ballots
                 election_dict[alt_winning_voters_full_party_headers[method_indx]] = party_lists[0]
@@ -392,7 +445,7 @@ for election_num, name in enumerate(file_names):
                     
     # anomaly_results.append(election_dict)
 sys.stdout.write('\r')
-print(f'Alt Winner Anomalies Found: {alt_winner_anomaly_count}                                ')
+# print(f'Alt Winner Anomalies Found: {alt_winner_anomaly_count}                                ')
 print(f'Alt Winner Anomalies with Party Changes: {alt_winner_party_change_count}                                ')
 print(f'Time taken: {time.time()-start_time}')
 
@@ -402,7 +455,7 @@ print(f'Time taken: {time.time()-start_time}')
 
 
 ## Write results to csv file
-with open('anomaly_data_l10_w3.csv', 'w', newline='') as csvfile:
+with open('anomaly_data_party_dynamics_l10_w3.csv', 'w', newline='') as csvfile:
     writer = csv.DictWriter(csvfile, fieldnames=csv_headers)
     writer.writeheader()
     for election in anomaly_results:

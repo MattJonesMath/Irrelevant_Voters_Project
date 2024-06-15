@@ -13,7 +13,7 @@ class mw_elections:
     def __init__(self, name):
         if name != '':
             self.name = name
-            self.ballots, self.cand_num, self.seat_num = self.get_ballots(self.name)
+            self.ballots, self.cand_num, self.seat_num, self.parties = self.get_ballots(self.name)
         else:
             self.ballots = {}
             self.cand_num = 0
@@ -25,20 +25,123 @@ class mw_elections:
     ## read csv files from mggg/scot-elex
     #####################################
     def get_ballots(self, name):
+        parties = []
         bottom=False
         with open(name, encoding="utf8") as csv_file:
             csv_reader = csv.reader(csv_file)
             line_count = 0
             for row in csv_reader:
-                if row[0][0]=='0':
-                    if len(row[0])==1 or row[0][1]!='.':
-                        bottom = True
                 ## First row contains information about number of candidates and seats
                 if line_count == 0:
                     indx = row[0].index(' ')
                     cand_num = int(row[0][:indx])
                     seat_num = int(row[0][indx:])
                     ballots = {}
+                    
+                ## Get party affiliations
+                if bottom and len(parties)<cand_num:
+                    line = row[0]
+                    
+                    if '(Con)' in line or '(C)' in line  or line[0:3]=='Con' or 'Conservative' in line:
+                        parties.append('Con')
+                    elif '(SNP)' in line or 'SNP' in line or 'Scottish National' in line:
+                        parties.append('SNP')
+                    elif '(Grn)' in line or 'Scottish Green' in line or line[0:3]=='Grn':
+                        parties.append('Grn')
+                    elif 'Scottish Unionist' in line or '(SU)' in line:
+                        parties.append('SU')
+                    elif '(Lab)' in line or 'Labour' in line or line[0:3]=='Lab':
+                        parties.append('Lab')
+                    elif '(LD)' in line or 'Liberal Democrat' in line or line[0:2]=='LD':
+                        parties.append('LD')
+                    elif '(Ind)' in line or 'Independent' in line or 'Ind' in line or line[0:3]=='Ind':
+                        parties.append('Ind')
+                    elif '(Libtn)' in line or 'Libertarian' in line:
+                        parties.append('Libtn')
+                    elif '(SC)' in line or 'Scottish Christian' in line or '(Chr)' in line:
+                        parties.append('SC')
+                    elif '(Sol)' in line or 'Solidarity' in line:
+                        parties.append('Sol')
+                    elif 'UKIP' in line or 'UK Independence' in line:
+                        parties.append('UKIP')
+                    elif 'SFP' in line or 'Scottish Family' in line:
+                        parties.append('SFP')
+                    elif 'TUSC' in line or 'Trade Unionist' in line:
+                        parties.append('TUSC')
+                    elif '(NF)' in line or 'National Front' in line:
+                        parties.append('NF')
+                    elif '(Soc)' in line or 'Scottish Trade Unionist and Socialist' in line or 'Scottish Socialist' in line or 'SSP' in line:
+                        parties.append('Soc')
+                    elif 'API' in line or 'ALBA' in line or 'Alba' in line:
+                        parties.append('Alba')
+                    elif '(SDP)' in line or 'Social Democratic' in line:
+                        parties.append('SDP')
+                    elif '(GF)' in line or 'Glasgow First' in line:
+                        parties.append('Glasgow First')
+                    elif 'Britannica' in line:
+                        parties.append('Britannica')
+                    elif '(Pir)' in line or 'Pirate' in line:
+                        parties.append('Pir')
+                    elif '(Comm)' in line or 'Communist' in line:
+                        parties.append('Comm')
+                    elif 'BNP' in line or 'British National Party' in line:
+                        parties.append('BNP')
+                    elif 'CPA' in line or 'Christian People' in line:
+                        parties.append('CPA')
+                    elif '(SSC)' in line or 'Scottish Senior' in line:
+                        parties.append('SSC')
+                    elif '(MVR)' in line or 'Monster Raving' in line:
+                        parties.append('MVR')
+                    elif 'Sovereignty' in line:
+                        parties.append('Sovereignty')
+                    elif 'Volt UK' in line:
+                        parties.append('Volt UK')
+                    elif 'Freedom Alliance' in line:
+                        parties.append('Freedom Alliance')
+                    elif 'Vanguard' in line:
+                        parties.append('Vanguard')
+                    elif '(SEFP)' in line:
+                        parties.append('SEFP')
+                    elif '(Lib)' in line or 'Liberal Party' in line:
+                        parties.append('Liberal')
+                    elif 'EDIA' in line or 'East Dunbartonshire' in line:
+                        parties.append('EDIA')
+                    elif 'Borders' in line:
+                        parties.append('Scottish Borders')
+                    elif 'EKA' in line or 'East Kilbride' in line:
+                        parties.append('EKA')
+                    elif 'CICA' in line:
+                        parties.append('CICA')
+                    elif 'Rubbish' in line:
+                        parties.append('Rubbish')
+                    elif 'British Unionist' in line:
+                        parties.append('British Unionist')
+                    elif 'OMG' in line:
+                        parties.append('OMG')
+                    elif 'WDCP' in line or 'West Dunbartonshire' in line or '(WDuns)' in line:
+                        parties.append('WDuns')
+                    else:
+                        parties.append('Unknown')
+
+                    
+                    
+                    
+                    # if len(parties)<cand_num:
+                    #     if '(' in row[0]:
+                    #         indx = row[0].index('(')
+                    #         nindx = row[0].index(')')
+                    #         party = row[0][indx+1: nindx]
+                    #         parties.append(party)
+                    #     elif '"' in row[0]:
+                    #         indxs = [i for i in range(len(row[0])) if row[0][i] == '"']
+                    #         party = row[0][indxs[-2]+1: indxs[-1]]
+                    #         parties.append(party)
+                    #     else:
+                    #         parties.append('None Listed')
+                        
+                if row[0][0]=='0':
+                    if len(row[0])==1 or row[0][1]!='.':
+                        bottom = True
                     
                 ## Each row has number of votes, list of candidates, and then 0
                 if line_count>0 and not bottom:
@@ -54,11 +157,12 @@ class mw_elections:
                         ballots[ballot] += ballot_num
                     else:
                         ballots[ballot] = ballot_num
+
             
                 line_count += 1
         
         ## return dictionary of ballots and number of candidates and seats
-        return ballots, cand_num, seat_num
+        return ballots, cand_num, seat_num, parties
 
 
     #######################
