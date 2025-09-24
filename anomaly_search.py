@@ -13,7 +13,7 @@ def loser_anomaly_search(file_name, method_indx):
     full_lxn = mwe(file_name)
     if method_indx in [5,6]:
         full_lxn.model = 'PM'
-    method_functions_full = [full_lxn.scot_stv, full_lxn.aq_stv, full_lxn.meek_stv, full_lxn.cham_cour, full_lxn.greedy_cham_cour, full_lxn.cham_cour, full_lxn.greedy_cham_cour, full_lxn.expanding_approvals, full_lxn.cpo_stv]
+    method_functions_full = [full_lxn.scot_stv, full_lxn.aq_stv, full_lxn.meek_stv, full_lxn.cham_cour, full_lxn.greedy_cham_cour, full_lxn.cham_cour, full_lxn.greedy_cham_cour, full_lxn.expanding_approvals, full_lxn.cpo_stv, full_lxn.expanding_approvals_om]
     lxn_method_full = method_functions_full[method_indx]
     full_results = lxn_method_full()
     winners = full_results[0]
@@ -26,7 +26,7 @@ def loser_anomaly_search(file_name, method_indx):
         lxn.model = 'PM'
     lxn.cand_num = full_lxn.cand_num
     lxn.seat_num = full_lxn.seat_num
-    method_functions = [lxn.scot_stv, lxn.aq_stv, lxn.meek_stv, lxn.cham_cour, lxn.greedy_cham_cour, full_lxn.cham_cour, full_lxn.greedy_cham_cour, lxn.expanding_approvals, lxn.cpo_stv]
+    method_functions = [lxn.scot_stv, lxn.aq_stv, lxn.meek_stv, lxn.cham_cour, lxn.greedy_cham_cour, lxn.cham_cour, lxn.greedy_cham_cour, lxn.expanding_approvals, lxn.cpo_stv, lxn.expanding_approvals_om]
     lxn_method = method_functions[method_indx]
     
     same_party_winners = []
@@ -64,7 +64,7 @@ def winner_anomaly_search(file_name, method_indx):
     full_lxn = mwe(file_name)
     if method_indx in [5,6]:
         full_lxn.model = 'PM'
-    method_functions_full = [full_lxn.scot_stv, full_lxn.aq_stv, full_lxn.meek_stv, full_lxn.cham_cour, full_lxn.greedy_cham_cour, full_lxn.cham_cour, full_lxn.greedy_cham_cour, full_lxn.expanding_approvals, full_lxn.cpo_stv]
+    method_functions_full = [full_lxn.scot_stv, full_lxn.aq_stv, full_lxn.meek_stv, full_lxn.cham_cour, full_lxn.greedy_cham_cour, full_lxn.cham_cour, full_lxn.greedy_cham_cour, full_lxn.expanding_approvals, full_lxn.cpo_stv, full_lxn.expanding_approvals_om]
     lxn_method_full = method_functions_full[method_indx]
     full_results = lxn_method_full()
     winners = full_results[0]
@@ -78,7 +78,7 @@ def winner_anomaly_search(file_name, method_indx):
         lxn.model = 'PM'
     lxn.cand_num = full_lxn.cand_num
     lxn.seat_num = full_lxn.seat_num
-    method_functions = [lxn.scot_stv, lxn.aq_stv, lxn.meek_stv, lxn.cham_cour, lxn.greedy_cham_cour, lxn.cham_cour, lxn.greedy_cham_cour, lxn.expanding_approvals, lxn.cpo_stv]
+    method_functions = [lxn.scot_stv, lxn.aq_stv, lxn.meek_stv, lxn.cham_cour, lxn.greedy_cham_cour, lxn.cham_cour, lxn.greedy_cham_cour, lxn.expanding_approvals, lxn.cpo_stv, lxn.expanding_approvals_om]
     lxn_method = method_functions[method_indx]
     
     same_party_winners = []
@@ -150,7 +150,7 @@ def alt_winner_anomaly_search(file_name, method_indx):
     full_lxn = mwe(file_name)
     if method_indx in [5,6]:
         full_lxn.model = 'PM'
-    method_functions_full = [full_lxn.scot_stv, full_lxn.aq_stv, full_lxn.meek_stv, full_lxn.cham_cour, full_lxn.greedy_cham_cour, full_lxn.cham_cour, full_lxn.greedy_cham_cour, full_lxn.expanding_approvals, full_lxn.cpo_stv]
+    method_functions_full = [full_lxn.scot_stv, full_lxn.aq_stv, full_lxn.meek_stv, full_lxn.cham_cour, full_lxn.greedy_cham_cour, full_lxn.cham_cour, full_lxn.greedy_cham_cour, full_lxn.expanding_approvals, full_lxn.cpo_stv, full_lxn.expanding_approvals_om]
     lxn_method_full = method_functions_full[method_indx]
     full_results = lxn_method_full()
     winners = full_results[0]
@@ -164,7 +164,7 @@ def alt_winner_anomaly_search(file_name, method_indx):
         lxn.model = 'PM'
     lxn.cand_num = full_lxn.cand_num
     lxn.seat_num = full_lxn.seat_num
-    method_functions = [lxn.scot_stv, lxn.aq_stv, lxn.meek_stv, lxn.cham_cour, lxn.greedy_cham_cour, lxn.cham_cour, lxn.greedy_cham_cour, lxn.expanding_approvals, lxn.cpo_stv]
+    method_functions = [lxn.scot_stv, lxn.aq_stv, lxn.meek_stv, lxn.cham_cour, lxn.greedy_cham_cour, lxn.cham_cour, lxn.greedy_cham_cour, lxn.expanding_approvals, lxn.cpo_stv, lxn.expanding_approvals_om]
     lxn_method = method_functions[method_indx]
     
     same_party_winners = []
@@ -234,31 +234,32 @@ def alt_winner_anomaly_search(file_name, method_indx):
 ###################################
 ## Chose which elections to run
 ###################################
-run_scottish = True
+run_scottish = False
 run_adapt_quota = False
-run_meek = True
-run_cham_cour_OM = True
+run_meek = False
+run_cham_cour_OM = False
 run_greedy_cham_cour_OM = False
-run_cham_cour_PM = True
+run_cham_cour_PM = False
 run_greedy_cham_cour_PM = False
-run_expand_app = True
+run_expand_app = False
 run_cpo_stv = False
+run_expand_app_om = True
 ###################################
 ###################################
 
-which_methods = [run_scottish, run_adapt_quota, run_meek, run_cham_cour_OM, run_greedy_cham_cour_OM, run_cham_cour_PM, run_greedy_cham_cour_PM, run_expand_app, run_cpo_stv]
-losing_voters_headers = ['Scottish STV - Losing Voter Bloc Anomaly', 'AQ STV - Losing Voter Bloc Anomaly', 'Meek STV - Losing Voter Bloc Anomaly', 'Chamberlin-Courant (OM) - Losing Voter Bloc Anomaly', 'Greedy Chamberlin-Courant (OM) - Losing Voter Bloc Anomaly', 'Chamberlin-Courant (PM) - Losing Voter Bloc Anomaly', 'Greedy Chamberlin-Courant (PM) - Losing Voter Bloc Anomaly', 'Expanding Approvals - Losing Voter Bloc Anomaly', 'CPO STV - Losing Voter Bloc Anomaly']
-removed_losing_ballot_headers = ['Scottish STV - Removed Loser Ballots', 'AQ STV - Removed Loser Ballots', 'Meek STV - Removed Loser Ballots', 'Chamberlin-Courant (OM) - Removed Loser Ballots', 'Greedy Chamberlin-Courant (OM) - Removed Loser Ballots', 'Chamberlin-Courant (PM) - Removed Loser Ballots', 'Greedy Chamberlin-Courant (PM) - Removed Loser Ballots', 'Expanding Approvals - Removed Loser Ballots', 'CPO STV - Removed Loser Ballots']
-losing_voters_full_party_headers = ['Scottish STV - Losing Voter Bloc Original Winning Parties', 'AQ STV - Losing Voter Bloc Original Winning Parties', 'Meek STV - Losing Voter Bloc Original Winning Parties', 'Chamberlin-Courant (OM) - Losing Voter Bloc Original Winning Parties', 'Greedy Chamberlin-Courant (OM) - Losing Voter Bloc Original Winning Parties', 'Chamberlin-Courant (PM) - Losing Voter Bloc Original Winning Parties', 'Greedy Chamberlin-Courant (PM) - Losing Voter Bloc Original Winning Parties', 'Expanding Approvals - Losing Voter Bloc Original Winning Parties', 'CPO STV - Losing Voter Bloc Original Winning Parties']
-losing_voters_partial_party_headers = ['Scottish STV - Losing Voter Bloc New Winning Parties', 'AQ STV - Losing Voter Bloc New Winning Parties', 'Meek STV - Losing Voter Bloc New Winning Parties', 'Chamberlin-Courant (OM) - Losing Voter Bloc New Winning Parties', 'Greedy Chamberlin-Courant (OM) - Losing Voter Bloc New Winning Parties', 'Chamberlin-Courant (PM) - Losing Voter Bloc New Winning Parties', 'Greedy Chamberlin-Courant (PM) - Losing Voter Bloc New Winning Parties', 'Expanding Approvals - Losing Voter Bloc New Winning Parties', 'CPO STV - Losing Voter Bloc New Winning Parties']
-winning_voters_headers = ['Scottish STV - Winning Voter Bloc Anomaly', 'AQ STV - Winning Voter Bloc Anomaly', 'Meek STV - Winning Voter Bloc Anomaly', 'Chamberlin-Courant (OM) - Winning Voter Bloc Anomaly', 'Greedy Chamberlin-Courant (OM) - Winning Voter Bloc Anomaly', 'Chamberlin-Courant (PM) - Winning Voter Bloc Anomaly', 'Greedy Chamberlin-Courant (PM) - Winning Voter Bloc Anomaly', 'Expanding Approvals - Winning Voter Bloc Anomaly', 'CPO STV - Winning Voter Bloc Anomaly']
-removed_winning_ballot_headers = ['Scottish STV - Removed Winner Ballots', 'AQ STV - Removed Winner Ballots', 'Meek STV - Removed Winner Ballots', 'Chamberlin-Courant (OM) - Removed Winner Ballots', 'Greedy Chamberlin-Courant (OM) - Removed Winner Ballots', 'Chamberlin-Courant (PM) - Removed Winner Ballots', 'Greedy Chamberlin-Courant (PM) - Removed Winner Ballots', 'Expanding Approvals - Removed Winner Ballots', 'CPO STV - Removed Winner Ballots']
-winning_voters_full_party_headers = ['Scottish STV - Winning Voter Bloc Original Winning Parties', 'AQ STV - Winning Voter Bloc Original Winning Parties', 'Meek STV - Winning Voter Bloc Original Winning Parties', 'Chamberlin-Courant (OM) - Winning Voter Bloc Original Winning Parties', 'Greedy Chamberlin-Courant (OM) - Winning Voter Bloc Original Winning Parties', 'Chamberlin-Courant (PM) - Winning Voter Bloc Original Winning Parties', 'Greedy Chamberlin-Courant (PM) - Winning Voter Bloc Original Winning Parties', 'Expanding Approvals - Winning Voter Bloc Original Winning Parties', 'CPO STV - Winning Voter Bloc Original Winning Parties']
-winning_voters_partial_party_headers = ['Scottish STV - Winning Voter Bloc New Winning Parties', 'AQ STV - Winning Voter Bloc New Winning Parties', 'Meek STV - Winning Voter Bloc New Winning Parties', 'Chamberlin-Courant (OM) - Winning Voter Bloc New Winning Parties', 'Greedy Chamberlin-Courant (OM) - Winning Voter Bloc New Winning Parties', 'Chamberlin-Courant (PM) - Winning Voter Bloc New Winning Parties', 'Greedy Chamberlin-Courant (PM) - Winning Voter Bloc New Winning Parties', 'Expanding Approvals - Winning Voter Bloc New Winning Parties', 'CPO STV - Winning Voter Bloc New Winning Parties']
-alt_winning_voters_headers = ['Scottish STV - Alt Winning Voter Bloc Anomaly', 'AQ STV - Alt Winning Voter Bloc Anomaly', 'Meek STV - Alt Winning Voter Bloc Anomaly', 'Chamberlin-Courant (OM) - Alt Winning Voter Bloc Anomaly', 'Greedy Chamberlin-Courant (OM) - Alt Winning Voter Bloc Anomaly', 'Chamberlin-Courant (PM) - Alt Winning Voter Bloc Anomaly', 'Greedy Chamberlin-Courant (PM) - Alt Winning Voter Bloc Anomaly', 'Expanding Approvals - Alt Winning Voter Bloc Anomaly', 'CPO STV - Alt Winning Voter Bloc Anomaly']
-alt_removed_winning_ballot_headers = ['Scottish STV - Removed Alt Winner Ballots', 'AQ STV - Removed Alt  Winner Ballots', 'Meek STV - Removed Alt Winner Ballots', 'Chamberlin-Courant (OM) - Removed Alt Winner Ballots', 'Greedy Chamberlin-Courant (OM) - Removed Alt Winner Ballots', 'Chamberlin-Courant (PM) - Removed Alt Winner Ballots', 'Greedy Chamberlin-Courant (PM) - Removed Alt Winner Ballots', 'Expanding Approvals - Removed Alt Winner Ballots', 'CPO STV - Removed Alt Winner Ballots']
-alt_winning_voters_full_party_headers = ['Scottish STV - Alt Winning Voter Bloc Original Winning Parties', 'AQ STV - Alt Winning Voter Bloc Original Winning Parties', 'Meek STV - Alt Winning Voter Bloc Original Winning Parties', 'Chamberlin-Courant (OM) - Alt Winning Voter Bloc Original Winning Parties', 'Greedy Chamberlin-Courant (OM) - Alt Winning Voter Bloc Original Winning Parties', 'Chamberlin-Courant (PM) - Alt Winning Voter Bloc Original Winning Parties', 'Greedy Chamberlin-Courant (PM) - Alt Winning Voter Bloc Original Winning Parties', 'Expanding Approvals - Alt Winning Voter Bloc Original Winning Parties', 'CPO STV - Alt Winning Voter Bloc Original Winning Parties']
-alt_winning_voters_partial_party_headers = ['Scottish STV - Alt Winning Voter Bloc New Winning Parties', 'AQ STV - Alt Winning Voter Bloc New Winning Parties', 'Meek STV - Alt Winning Voter Bloc New Winning Parties', 'Chamberlin-Courant (OM) - Alt Winning Voter Bloc New Winning Parties', 'Greedy Chamberlin-Courant (OM) - Alt Winning Voter Bloc New Winning Parties', 'Chamberlin-Courant (PM) - Alt Winning Voter Bloc New Winning Parties', 'Greedy Chamberlin-Courant (PM) - Alt Winning Voter Bloc New Winning Parties', 'Expanding Approvals - Alt Winning Voter Bloc New Winning Parties', 'CPO STV - Alt Winning Voter Bloc New Winning Parties']
+which_methods = [run_scottish, run_adapt_quota, run_meek, run_cham_cour_OM, run_greedy_cham_cour_OM, run_cham_cour_PM, run_greedy_cham_cour_PM, run_expand_app, run_cpo_stv, run_expand_app_om]
+losing_voters_headers = ['Scottish STV - Losing Voter Bloc Anomaly', 'AQ STV - Losing Voter Bloc Anomaly', 'Meek STV - Losing Voter Bloc Anomaly', 'Chamberlin-Courant (OM) - Losing Voter Bloc Anomaly', 'Greedy Chamberlin-Courant (OM) - Losing Voter Bloc Anomaly', 'Chamberlin-Courant (PM) - Losing Voter Bloc Anomaly', 'Greedy Chamberlin-Courant (PM) - Losing Voter Bloc Anomaly', 'Expanding Approvals - Losing Voter Bloc Anomaly', 'CPO STV - Losing Voter Bloc Anomaly', 'Expanding Approvals OM - Losing Voter Bloc Anomaly']
+removed_losing_ballot_headers = ['Scottish STV - Removed Loser Ballots', 'AQ STV - Removed Loser Ballots', 'Meek STV - Removed Loser Ballots', 'Chamberlin-Courant (OM) - Removed Loser Ballots', 'Greedy Chamberlin-Courant (OM) - Removed Loser Ballots', 'Chamberlin-Courant (PM) - Removed Loser Ballots', 'Greedy Chamberlin-Courant (PM) - Removed Loser Ballots', 'Expanding Approvals - Removed Loser Ballots', 'CPO STV - Removed Loser Ballots', 'Expanding Approvals OM - Removed Loser Ballots']
+losing_voters_full_party_headers = ['Scottish STV - Losing Voter Bloc Original Winning Parties', 'AQ STV - Losing Voter Bloc Original Winning Parties', 'Meek STV - Losing Voter Bloc Original Winning Parties', 'Chamberlin-Courant (OM) - Losing Voter Bloc Original Winning Parties', 'Greedy Chamberlin-Courant (OM) - Losing Voter Bloc Original Winning Parties', 'Chamberlin-Courant (PM) - Losing Voter Bloc Original Winning Parties', 'Greedy Chamberlin-Courant (PM) - Losing Voter Bloc Original Winning Parties', 'Expanding Approvals - Losing Voter Bloc Original Winning Parties', 'CPO STV - Losing Voter Bloc Original Winning Parties', 'Expanding Approvals OM - Losing Voter Bloc Original Winning Parties']
+losing_voters_partial_party_headers = ['Scottish STV - Losing Voter Bloc New Winning Parties', 'AQ STV - Losing Voter Bloc New Winning Parties', 'Meek STV - Losing Voter Bloc New Winning Parties', 'Chamberlin-Courant (OM) - Losing Voter Bloc New Winning Parties', 'Greedy Chamberlin-Courant (OM) - Losing Voter Bloc New Winning Parties', 'Chamberlin-Courant (PM) - Losing Voter Bloc New Winning Parties', 'Greedy Chamberlin-Courant (PM) - Losing Voter Bloc New Winning Parties', 'Expanding Approvals - Losing Voter Bloc New Winning Parties', 'CPO STV - Losing Voter Bloc New Winning Parties', 'Expanding Approvals OM - Losing Voter Bloc New Winning Parties']
+winning_voters_headers = ['Scottish STV - Winning Voter Bloc Anomaly', 'AQ STV - Winning Voter Bloc Anomaly', 'Meek STV - Winning Voter Bloc Anomaly', 'Chamberlin-Courant (OM) - Winning Voter Bloc Anomaly', 'Greedy Chamberlin-Courant (OM) - Winning Voter Bloc Anomaly', 'Chamberlin-Courant (PM) - Winning Voter Bloc Anomaly', 'Greedy Chamberlin-Courant (PM) - Winning Voter Bloc Anomaly', 'Expanding Approvals - Winning Voter Bloc Anomaly', 'CPO STV - Winning Voter Bloc Anomaly', 'Expanding Approvals OM - Winning Voter Bloc Anomaly']
+removed_winning_ballot_headers = ['Scottish STV - Removed Winner Ballots', 'AQ STV - Removed Winner Ballots', 'Meek STV - Removed Winner Ballots', 'Chamberlin-Courant (OM) - Removed Winner Ballots', 'Greedy Chamberlin-Courant (OM) - Removed Winner Ballots', 'Chamberlin-Courant (PM) - Removed Winner Ballots', 'Greedy Chamberlin-Courant (PM) - Removed Winner Ballots', 'Expanding Approvals - Removed Winner Ballots', 'CPO STV - Removed Winner Ballots', 'Expanding Approvals OM - Removed Winner Ballots']
+winning_voters_full_party_headers = ['Scottish STV - Winning Voter Bloc Original Winning Parties', 'AQ STV - Winning Voter Bloc Original Winning Parties', 'Meek STV - Winning Voter Bloc Original Winning Parties', 'Chamberlin-Courant (OM) - Winning Voter Bloc Original Winning Parties', 'Greedy Chamberlin-Courant (OM) - Winning Voter Bloc Original Winning Parties', 'Chamberlin-Courant (PM) - Winning Voter Bloc Original Winning Parties', 'Greedy Chamberlin-Courant (PM) - Winning Voter Bloc Original Winning Parties', 'Expanding Approvals - Winning Voter Bloc Original Winning Parties', 'CPO STV - Winning Voter Bloc Original Winning Parties', 'Expanding Approvals OM - Winning Voter Bloc Original Winning Parties']
+winning_voters_partial_party_headers = ['Scottish STV - Winning Voter Bloc New Winning Parties', 'AQ STV - Winning Voter Bloc New Winning Parties', 'Meek STV - Winning Voter Bloc New Winning Parties', 'Chamberlin-Courant (OM) - Winning Voter Bloc New Winning Parties', 'Greedy Chamberlin-Courant (OM) - Winning Voter Bloc New Winning Parties', 'Chamberlin-Courant (PM) - Winning Voter Bloc New Winning Parties', 'Greedy Chamberlin-Courant (PM) - Winning Voter Bloc New Winning Parties', 'Expanding Approvals - Winning Voter Bloc New Winning Parties', 'CPO STV - Winning Voter Bloc New Winning Parties', 'Expanding Approvals OM - Winning Voter Bloc New Winning Parties']
+alt_winning_voters_headers = ['Scottish STV - Alt Winning Voter Bloc Anomaly', 'AQ STV - Alt Winning Voter Bloc Anomaly', 'Meek STV - Alt Winning Voter Bloc Anomaly', 'Chamberlin-Courant (OM) - Alt Winning Voter Bloc Anomaly', 'Greedy Chamberlin-Courant (OM) - Alt Winning Voter Bloc Anomaly', 'Chamberlin-Courant (PM) - Alt Winning Voter Bloc Anomaly', 'Greedy Chamberlin-Courant (PM) - Alt Winning Voter Bloc Anomaly', 'Expanding Approvals - Alt Winning Voter Bloc Anomaly', 'CPO STV - Alt Winning Voter Bloc Anomaly', 'Expanding Approvals OM - Alt Winning Voter Bloc Anomaly']
+alt_removed_winning_ballot_headers = ['Scottish STV - Removed Alt Winner Ballots', 'AQ STV - Removed Alt  Winner Ballots', 'Meek STV - Removed Alt Winner Ballots', 'Chamberlin-Courant (OM) - Removed Alt Winner Ballots', 'Greedy Chamberlin-Courant (OM) - Removed Alt Winner Ballots', 'Chamberlin-Courant (PM) - Removed Alt Winner Ballots', 'Greedy Chamberlin-Courant (PM) - Removed Alt Winner Ballots', 'Expanding Approvals - Removed Alt Winner Ballots', 'CPO STV - Removed Alt Winner Ballots', 'Expanding Approvals OM - Removed Alt Winner Ballots']
+alt_winning_voters_full_party_headers = ['Scottish STV - Alt Winning Voter Bloc Original Winning Parties', 'AQ STV - Alt Winning Voter Bloc Original Winning Parties', 'Meek STV - Alt Winning Voter Bloc Original Winning Parties', 'Chamberlin-Courant (OM) - Alt Winning Voter Bloc Original Winning Parties', 'Greedy Chamberlin-Courant (OM) - Alt Winning Voter Bloc Original Winning Parties', 'Chamberlin-Courant (PM) - Alt Winning Voter Bloc Original Winning Parties', 'Greedy Chamberlin-Courant (PM) - Alt Winning Voter Bloc Original Winning Parties', 'Expanding Approvals - Alt Winning Voter Bloc Original Winning Parties', 'CPO STV - Alt Winning Voter Bloc Original Winning Parties', 'Expanding Approvals OM - Alt Winning Voter Bloc Original Winning Parties']
+alt_winning_voters_partial_party_headers = ['Scottish STV - Alt Winning Voter Bloc New Winning Parties', 'AQ STV - Alt Winning Voter Bloc New Winning Parties', 'Meek STV - Alt Winning Voter Bloc New Winning Parties', 'Chamberlin-Courant (OM) - Alt Winning Voter Bloc New Winning Parties', 'Greedy Chamberlin-Courant (OM) - Alt Winning Voter Bloc New Winning Parties', 'Chamberlin-Courant (PM) - Alt Winning Voter Bloc New Winning Parties', 'Greedy Chamberlin-Courant (PM) - Alt Winning Voter Bloc New Winning Parties', 'Expanding Approvals - Alt Winning Voter Bloc New Winning Parties', 'CPO STV - Alt Winning Voter Bloc New Winning Parties', 'Expanding Approvals OM - Alt Winning Voter Bloc New Winning Parties']
 csv_headers = ['Election']
 
 method_num = len(which_methods)
@@ -402,7 +403,7 @@ print(f'Time taken: {time.time()-start_time}')
 
 
 ## Write results to csv file
-with open('anomaly_data_l10_w3.csv', 'w', newline='') as csvfile:
+with open('anomaly_data_EAR_OM_l10_w3.csv', 'w', newline='') as csvfile:
     writer = csv.DictWriter(csvfile, fieldnames=csv_headers)
     writer.writeheader()
     for election in anomaly_results:
