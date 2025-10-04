@@ -234,14 +234,14 @@ def alt_winner_anomaly_search(file_name, method_indx):
 ###################################
 ## Chose which elections to run
 ###################################
-run_scottish = False
+run_scottish = True
 run_adapt_quota = False
-run_meek = False
-run_cham_cour_OM = False
+run_meek = True
+run_cham_cour_OM = True
 run_greedy_cham_cour_OM = False
-run_cham_cour_PM = False
+run_cham_cour_PM = True
 run_greedy_cham_cour_PM = False
-run_expand_app = False
+run_expand_app = True
 run_cpo_stv = False
 run_expand_app_om = True
 ###################################
@@ -283,11 +283,15 @@ for i in range(method_num):
 ## create list of file names for all scottish elections
 party_list = set([])
 file_names = {}
-for folder_name in os.listdir('../full_scot_data'):
+data_location = "C:/Users/mijones/Documents/Datasets/full_scot_data"
+# for folder_name in os.listdir('../full_scot_data'):
+for folder_name in os.listdir(data_location):
     # if '5_cands' in folder_name:
     if 'cands' in folder_name:
-        for name in os.listdir(f'../full_scot_data/{folder_name}'):
-            file_name = '../full_scot_data/'+folder_name+'/'+name
+        # for name in os.listdir(f'../full_scot_data/{folder_name}'):
+        for name in os.listdir(data_location + '/'+folder_name):
+            # file_name = '../full_scot_data/'+folder_name+'/'+name
+            file_name = data_location + '/'+folder_name+'/'+name
             lxn = mwe(file_name)
             if lxn.seat_num > 1:
                 file_names[name] = file_name
@@ -402,20 +406,20 @@ print(f'Time taken: {time.time()-start_time}')
 
 
 
-## Write results to csv file
-with open('anomaly_data_EAR_OM_l10_w3.csv', 'w', newline='') as csvfile:
-    writer = csv.DictWriter(csvfile, fieldnames=csv_headers)
-    writer.writeheader()
-    for election in anomaly_results:
-        writer.writerow(election)
+# ## Write results to csv file
+# with open('anomaly_data_EAR_OM_l10_w3.csv', 'w', newline='') as csvfile:
+#     writer = csv.DictWriter(csvfile, fieldnames=csv_headers)
+#     writer.writeheader()
+#     for election in anomaly_results:
+#         writer.writerow(election)
 
 
-zero_anomaly_count = 0
-for anomaly in anomaly_results:
-    if len(anomaly)==1:
-        zero_anomaly_count += 1
+# zero_anomaly_count = 0
+# for anomaly in anomaly_results:
+#     if len(anomaly)==1:
+#         zero_anomaly_count += 1
 
-print(f'{zero_anomaly_count} elections with no election anomalies')
+# print(f'{zero_anomaly_count} elections with no election anomalies')
 
 
 

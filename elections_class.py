@@ -245,6 +245,10 @@ class mw_elections:
                         
                     ## no candidate makes quota, so remove the worst candidate remaining
                     else:
+                        
+                        # if vote_counts.count(min(vote_counts))>1:
+                        #     print('STV remove loser tie')
+                            
                         indx = vote_counts.index(min(vote_counts))
                         removed.append(remaining.pop(indx))
                         new_loser = removed[-1]
@@ -433,6 +437,10 @@ class mw_elections:
                     else:
                         hopeful_votes = [cand_votes[cand-1] for cand in hopeful]
                         losers = [cand for cand in hopeful if cand_votes[cand-1] == min(hopeful_votes)]
+                        
+                        # if len(losers)>1:
+                        #     print('Meek STV remove loser tie')
+                            
                         for cand in losers:
                             excluded.append(cand)
                             hopeful.remove(cand)
@@ -628,6 +636,9 @@ class mw_elections:
                     points += self.cand_num - 1 - len(ballot)
             outcome_points.append(points)
             
+        # if outcome_points.count(max(outcome_points))>1:
+        #     print(f'CC {self.model} winner set tie')
+            
         winner_set = list(outcomes[outcome_points.index(max(outcome_points))])
         loser_set = [cand for cand in range(1,self.cand_num+1) if cand not in winner_set]
             
@@ -691,9 +702,20 @@ class mw_elections:
                 for cand in ballot[:j+1]:
                     cand_votes[cand-1] += ballot_num
             
+            # print(remaining)
+            # print(elected)
+            # print(cand_votes)
+            
             possible_winners = [cand for cand in remaining if cand_votes[cand-1] > quota]
             if possible_winners or j >= self.cand_num-2:
                 remaining_votes = [cand_votes[cand-1] for cand in remaining]
+                
+                # if remaining_votes.count(max(remaining_votes))>1:
+                #     print('EAR PM winner tie')
+                    # print(elected)
+                    # print(remaining)
+                    # print(remaining_votes)
+                
                 winner = remaining[remaining_votes.index(max(remaining_votes))]
                 
                 remaining.remove(winner)
@@ -715,7 +737,67 @@ class mw_elections:
     
         return elected, remaining
     
+
+    ###############################
+    ## Expanding Approvals Original Version
+    ###############################
+    def expanding_approvals_om(self):
+        ballot_weights = self.ballots.copy()
+        remaining = list(range(1, self.cand_num+1))
+        elected = []
+        j = 0
+
+        total_votes = 0
+        for ballot in ballot_weights:
+            total_votes += ballot_weights[ballot]
+        # quota = total_votes/(self.seat_num+1) + 1/(cand_num+1)*(np.floor(total_votes/(seat_num+1)) + 1 - total_votes/(seat_num+1))
+        quota = total_votes/(self.seat_num+1)
+
+        while len(elected)<self.seat_num:
+            cand_votes = [0 for _ in range(self.cand_num)]
+            for ballot in ballot_weights:
+                ballot_num = ballot_weights[ballot]
+                ## changed this block so truncated ballots approve all candidates
+                if j+1 <= len(ballot):
+                    for cand in ballot[:j+1]:
+                        cand_votes[cand-1] += ballot_num
+                else:
+                    for cand in range(self.cand_num):
+                        cand_votes[cand] += ballot_num
+                    
+            # print('### Next round ###')
+            # print(quota)
+            # print(j)
+            # print(cand_votes)
+            # print(elected)
+            
+            possible_winners = [cand for cand in remaining if cand_votes[cand-1] > quota]
+            if possible_winners or j >= self.cand_num-2:
+                remaining_votes = [cand_votes[cand-1] for cand in remaining]
+                
+                # if remaining_votes.count(max(remaining_votes))>1:
+                #     print('EAR OM winner tie')
+                
+                winner = remaining[remaining_votes.index(max(remaining_votes))]
+                
+                remaining.remove(winner)
+                elected.append(winner)
+                
+                supporters = []
+                support_vote = 0
+                for ballot in ballot_weights:
+                    if winner in ballot[:j+1]:
+                        supporters.append(ballot)
+                        support_vote += ballot_weights[ballot]
+                
+                payment_frac = (support_vote - quota)/support_vote
+                for ballot in supporters:
+                    ballot_weights[ballot] *= payment_frac
+            
+            else:
+                j+=1
     
+        return elected, remaining
     
     
     
